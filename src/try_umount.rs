@@ -80,6 +80,34 @@ impl TryUmount {
         }
         Ok(())
     }
+
+    pub fn wipe(&self) -> Result<()> {
+        let cmd = AddTryUmountCmd {
+            arg: 0,
+            flags: 0,
+            mode: 0,
+        };
+
+        let ret = unsafe {
+            #[cfg(target_env = "gnu")]
+            {
+                libc::ioctl(get_fd() as libc::c_int, KSU_IOCTL_ADD_TRY_UMOUNT, &cmd)
+            }
+            #[cfg(not(target_env = "gnu"))]
+            {
+                libc::ioctl(get_fd() as libc::c_int, KSU_IOCTL_ADD_TRY_UMOUNT, &cmd)
+            }
+        };
+
+        if ret < 0 {
+            return Err(anyhow::anyhow!(
+                "Failed to wipe list, Err: {}",
+                std::io::Error::last_os_error()
+            ));
+        };
+
+        Ok(())
+    }
 }
 
 #[cfg(test)]
