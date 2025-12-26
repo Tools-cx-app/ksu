@@ -120,4 +120,11 @@ mod tests {
 
         assert!(try_umount.is_ok());
     }
+
+    #[test]
+    fn wipe_list() {
+        let try_umount = TryUmount::new().wipe();
+
+        assert!(try_umount.is_ok())
+    }
 }
