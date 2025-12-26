@@ -1,0 +1,95 @@
+use std::path::{Path, PathBuf};
+
+use anyhow::Result;
+use rustix::path::Arg;
+
+use crate::{fd::get_fd, magic::KSU_IOCTL_ADD_TRY_UMOUNT};
+
+#[repr(C)]
+#[derive(Clone, Copy, Default)]
+struct AddTryUmountCmd {
+    arg: u64,   // char ptr, this is the mountpoint
+    flags: u32, // this is the flag we use for it
+    mode: u8,   // denotes what to do with it 0:wipe_list 1:add_to_list 2:delete_entry
+}
+
+pub struct TryUmount {
+    paths: Vec<PathBuf>,
+    flags: u32,
+}
+
+impl TryUmount {
+    pub fn new() -> Self {
+        Self {
+            paths: Vec::new(),
+            flags: 0,
+        }
+    }
+
+    pub fn add<S>(&mut self, p: S) -> &mut Self
+    where
+        S: AsRef<Path>,
+    {
+        self.paths.push(p.as_ref().to_path_buf());
+        self
+    }
+
+    pub fn adds<I, S>(&mut self, paths: I) -> &mut Self
+    where
+        I: IntoIterator<Item = S>,
+        S: AsRef<Path>,
+    {
+        for s in paths {
+            self.add(s);
+        }
+        self
+    }
+
+    pub fn flags(&mut self, flags: u32) -> &mut Self {
+        self.flags = flags;
+        self
+    }
+
+    pub fn umount(&self) -> Result<()> {
+        for p in &self.paths {
+            let c_path = std::ffi::CString::new(p.as_str()?)?;
+            let cmd = AddTryUmountCmd {
+                arg: c_path.as_ptr() as u64,
+                flags: self.flags,
+                mode: 1,
+            };
+
+            let ret = unsafe {
+                #[cfg(target_env = "gnu")]
+                {
+                    libc::ioctl(get_fd() as libc::c_int, KSU_IOCTL_ADD_TRY_UMOUNT, &cmd)
+                }
+                #[cfg(not(target_env = "gnu"))]
+                {
+                    libc::ioctl(get_fd() as libc::c_int, KSU_IOCTL_ADD_TRY_UMOUNT, &cmd)
+                }
+            };
+
+            if ret < 0 {
+                return Err(anyhow::anyhow!(
+                    "Failed to umount {}, Err: {}",
+                    p.display(),
+                    std::io::Error::last_os_error()
+                ));
+            }
+        }
+        Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn try_umount() {
+        let try_umount = TryUmount::new().add("/test").flags(2).umount();
+
+        assert!(try_umount.is_ok());
+    }
+}
