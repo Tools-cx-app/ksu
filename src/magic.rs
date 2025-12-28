@@ -5,3 +5,7 @@ pub(crate) const KSU_INSTALL_MAGIC2: u32 = 0xCAFEBABE;
 pub(crate) const KSU_IOCTL_ADD_TRY_UMOUNT: u64 = libc::_IOW::<()>(K, 18);
 #[cfg(not(target_env = "gnu"))]
 pub(crate) const KSU_IOCTL_ADD_TRY_UMOUNT: i32 = libc::_IOW::<()>(K, 18);
+#[cfg(target_env = "gnu")]
+pub(crate) const KSU_IOCTL_NUKE_EXT4_SYSFS: u64 = _IOW::<()>(K, 17);
+#[cfg(not(target_env = "gnu"))]
+pub(crate) const KSU_IOCTL_NUKE_EXT4_SYSFS: i32 = _IOW::<()>(K, 17);

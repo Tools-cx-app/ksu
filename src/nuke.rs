@@ -1,0 +1,74 @@
+use std::path::{Path, PathBuf};
+
+use anyhow::Result;
+use rustix::path::Arg;
+
+use crate::{fd::get_fd, magic::KSU_IOCTL_NUKE_EXT4_SYSFS};
+
+#[repr(C)]
+struct NukeExt4SysfsCmd {
+    arg: u64,
+}
+
+pub struct NukeExt4Sysfs {
+    paths: Vec<PathBuf>,
+}
+
+impl NukeExt4Sysfs {
+    pub fn new() -> Self {
+        Self { paths: Vec::new() }
+    }
+
+    pub fn add<S>(&mut self, p: S) -> &mut Self
+    where
+        S: AsRef<Path>,
+    {
+        self.paths.push(p.as_ref().to_path_buf());
+        self
+    }
+
+    pub fn adds<I, S>(&mut self, paths: I) -> &mut Self
+    where
+        I: IntoIterator<Item = S>,
+        S: AsRef<Path>,
+    {
+        for s in paths {
+            self.add(s);
+        }
+        self
+    }
+
+    pub fn execute(&self) -> Result<()> {
+        for p in &self.paths {
+            let c_path = std::ffi::CString::new(p.as_str()?)?;
+            let cmd = NukeExt4SysfsCmd {
+                arg: c_path.as_ptr() as u64,
+            };
+
+            let ret =
+                unsafe { libc::ioctl(get_fd() as libc::c_int, KSU_IOCTL_NUKE_EXT4_SYSFS, &cmd) };
+
+            if ret < 0 {
+                return Err(anyhow::anyhow!(
+                    "Failed to nuke {}, Err: {}",
+                    p.display(),
+                    std::io::Error::last_os_error()
+                ));
+            }
+        }
+
+        Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn nuke() {
+        let nuke = NukeExt4Sysfs::new().add("/test").execute();
+
+        assert!(nuke.is_ok());
+    }
+}
