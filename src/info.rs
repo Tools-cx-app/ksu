@@ -19,6 +19,6 @@ fn info() -> Option<GetInfoCmd> {
     if ret < 0 { None } else { Some(cmd) }
 }
 
-pub(crate) fn version() -> Option<u32> {
+pub fn version() -> Option<u32> {
     info().map(|info| info.version)
 }
