@@ -9,3 +9,7 @@ pub(crate) const KSU_IOCTL_ADD_TRY_UMOUNT: i32 = libc::_IOW::<()>(K, 18);
 pub(crate) const KSU_IOCTL_NUKE_EXT4_SYSFS: u64 = _IOW::<()>(K, 17);
 #[cfg(not(target_env = "gnu"))]
 pub(crate) const KSU_IOCTL_NUKE_EXT4_SYSFS: i32 = _IOW::<()>(K, 17);
+#[cfg(target_env = "gnu")]
+pub const KSU_IOCTL_GET_INFO: u64 = libc::_IOR::<()>(K, 2);
+#[cfg(not(target_env = "gnu"))]
+pub const KSU_IOCTL_GET_INFO: i32 = libc::_IOR::<()>(K, 2);
