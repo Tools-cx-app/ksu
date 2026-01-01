@@ -16,6 +16,7 @@ struct AddTryUmountCmd {
 pub struct TryUmount {
     paths: Vec<PathBuf>,
     flags: u32,
+    format_msg: Option<String>,
 }
 
 impl TryUmount {
@@ -23,6 +24,7 @@ impl TryUmount {
         Self {
             paths: Vec::new(),
             flags: 0,
+            format_msg: None,
         }
     }
 
@@ -77,8 +79,20 @@ impl TryUmount {
                     std::io::Error::last_os_error()
                 ));
             }
+
+            if let Some(msg) = self.format_msg.clone() {
+                log::debug!("{msg}");
+            }
         }
         Ok(())
+    }
+
+    pub fn format_msg<F, P>(&mut self, style: F) -> &mut Self
+    where
+        F: FnOnce(&Vec<PathBuf>) -> String,
+    {
+        self.format_msg = Some(style(&self.paths));
+        self
     }
 
     pub fn wipe(&self) -> Result<()> {
