@@ -87,7 +87,7 @@ impl TryUmount {
         Ok(())
     }
 
-    pub fn format_msg<F, P>(&mut self, style: F) -> &mut Self
+    pub fn format_msg<F>(&mut self, style: F) -> &mut Self
     where
         F: FnOnce(&Vec<PathBuf>) -> String,
     {
