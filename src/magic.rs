@@ -13,4 +13,3 @@ pub(crate) const KSU_IOCTL_NUKE_EXT4_SYSFS: i32 = libc::_IOW::<()>(K, 17);
 pub const KSU_IOCTL_GET_INFO: u64 = libc::_IOR::<()>(K, 2);
 #[cfg(not(target_env = "gnu"))]
 pub const KSU_IOCTL_GET_INFO: i32 = libc::_IOR::<()>(K, 2);
-

@@ -40,6 +40,8 @@ impl NukeExt4Sysfs {
 
     pub fn execute(&self) -> Result<()> {
         for p in &self.paths {
+            log::debug!("{} will umount", p.display());
+
             let c_path = std::ffi::CString::new(p.as_str()?)?;
             let cmd = NukeExt4SysfsCmd {
                 arg: c_path.as_ptr() as u64,
