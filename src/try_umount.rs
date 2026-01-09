@@ -53,6 +53,10 @@ impl TryUmount {
     }
 
     pub fn umount(&self) -> Result<()> {
+        if let Some(s) = self.format_msg.clone() {
+            log::debug!("{s}");
+        }
+
         for p in &self.paths {
             let c_path = std::ffi::CString::new(p.as_str()?)?;
             let cmd = AddTryUmountCmd {
@@ -78,10 +82,6 @@ impl TryUmount {
                     p.display(),
                     std::io::Error::last_os_error()
                 ));
-            }
-
-            if let Some(msg) = self.format_msg.clone() {
-                log::debug!("{msg}");
             }
         }
         Ok(())
