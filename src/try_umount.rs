@@ -1,4 +1,7 @@
-use std::path::{Path, PathBuf};
+use std::{
+    fmt,
+    path::{Path, PathBuf},
+};
 
 use anyhow::Result;
 use rustix::path::Arg;
@@ -89,8 +92,9 @@ impl TryUmount {
         Ok(())
     }
 
-    pub fn format_msg<F>(&mut self, style: F) -> &mut Self
+    pub fn format_msg<C, F>(&mut self, style: F) -> &mut Self
     where
+        C: fmt::Display + Send + Sync + 'static,
         F: FnOnce(&Vec<PathBuf>) -> String,
     {
         self.format_msg = Some(style(&self.paths));
