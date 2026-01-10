@@ -87,9 +87,9 @@ impl TryUmount {
     pub fn format_msg<C, F>(&mut self, style: F) -> &mut Self
     where
         C: fmt::Display + Send + Sync + 'static,
-        F: FnOnce(&Vec<PathBuf>) -> String,
+        F: FnOnce(&Vec<PathBuf>) -> C,
     {
-        self.format_msg = Some(style(&self.paths));
+        self.format_msg = Some(style(&self.paths).to_string());
         self
     }
 
