@@ -1,4 +1,7 @@
-use std::path::{Path, PathBuf};
+use std::{
+    fmt,
+    path::{Path, PathBuf},
+};
 
 use anyhow::Result;
 use rustix::path::Arg;
@@ -12,11 +15,15 @@ struct NukeExt4SysfsCmd {
 
 pub struct NukeExt4Sysfs {
     paths: Vec<PathBuf>,
+    format_msg: Option<String>,
 }
 
 impl NukeExt4Sysfs {
     pub fn new() -> Self {
-        Self { paths: Vec::new() }
+        Self {
+            paths: Vec::new(),
+            format_msg: None,
+        }
     }
 
     pub fn add<S>(&mut self, p: S) -> &mut Self
@@ -38,7 +45,20 @@ impl NukeExt4Sysfs {
         self
     }
 
+    pub fn format_msg<C, F>(&mut self, style: F) -> &mut Self
+    where
+        C: fmt::Display + Send + Sync + 'static,
+        F: FnOnce(&Vec<PathBuf>) -> String,
+    {
+        self.format_msg = Some(style(&self.paths));
+        self
+    }
+
     pub fn execute(&self) -> Result<()> {
+        if let Some(s) = self.format_msg.clone() {
+            log::debug!("{s}");
+        }
+
         for p in &self.paths {
             log::debug!("{} will umount", p.display());
 
