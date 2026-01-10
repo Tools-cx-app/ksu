@@ -70,16 +70,8 @@ impl TryUmount {
                 mode: 1,
             };
 
-            let ret = unsafe {
-                #[cfg(target_env = "gnu")]
-                {
-                    libc::ioctl(get_fd() as libc::c_int, KSU_IOCTL_ADD_TRY_UMOUNT, &cmd)
-                }
-                #[cfg(not(target_env = "gnu"))]
-                {
-                    libc::ioctl(get_fd() as libc::c_int, KSU_IOCTL_ADD_TRY_UMOUNT, &cmd)
-                }
-            };
+            let ret =
+                unsafe { libc::ioctl(get_fd() as libc::c_int, KSU_IOCTL_ADD_TRY_UMOUNT, &cmd) };
 
             if ret < 0 {
                 return Err(anyhow::anyhow!(
