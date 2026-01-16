@@ -55,10 +55,6 @@ impl NukeExt4Sysfs {
     }
 
     pub fn execute(&self) -> Result<()> {
-        if let Some(s) = self.format_msg.clone() {
-            log::debug!("{s}");
-        }
-
         for p in &self.paths {
             log::debug!("{} will umount", p.display());
 
@@ -77,6 +73,10 @@ impl NukeExt4Sysfs {
                     std::io::Error::last_os_error()
                 ));
             }
+        }
+
+        if let Some(s) = self.format_msg.clone() {
+            log::debug!("{s}");
         }
 
         Ok(())

@@ -56,10 +56,6 @@ impl TryUmount {
     }
 
     pub fn umount(&self) -> Result<()> {
-        if let Some(s) = self.format_msg.clone() {
-            log::debug!("{s}");
-        }
-
         for p in &self.paths {
             log::debug!("{} will umount", p.display());
 
@@ -81,6 +77,11 @@ impl TryUmount {
                 ));
             }
         }
+
+        if let Some(s) = self.format_msg.clone() {
+            log::debug!("{s}");
+        }
+
         Ok(())
     }
 
