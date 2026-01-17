@@ -12,7 +12,7 @@ pub(crate) const KSU_IOCTL_GET_FEATURE: u64 = libc::_IOWR::<()>(K, 13);
 pub(crate) const KSU_IOCTL_GET_FEATURE: i32 = libc::_IOWR::<()>(K, 13);
 
 #[cfg(not(target_env = "gnu"))]
-pub(crate) const KSU_IOCTL_SET_FEATURE: i32 = _IOW::<()>(K, 14);
+pub(crate) const KSU_IOCTL_SET_FEATURE: i32 = libc::_IOW::<()>(K, 14);
 #[cfg(target_env = "gnu")]
 pub(crate) const KSU_IOCTL_SET_FEATURE: u64 = libc::_IOW::<()>(K, 14);
 
