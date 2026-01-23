@@ -19,7 +19,7 @@ pub fn safemode() -> Result<bool> {
     };
 
     if ret < 0 {
-        return Err(errors::SafeError::GetFailed {
+        return Err(errors::Error::GetSafeModeFailed {
             source: std::io::Error::last_os_error(),
         }
         .into());

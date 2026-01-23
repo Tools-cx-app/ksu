@@ -24,16 +24,6 @@ pub enum FeatureError {
 }
 
 #[derive(Error, Debug)]
-pub enum NukeError {
-    #[error("Failed to nuke {path}, Err: {source}")]
-    NukeFailed {
-        path: String,
-        #[source]
-        source: StdError,
-    },
-}
-
-#[derive(Error, Debug)]
 pub enum TryUmountError {
     #[error("Failed to add try-umount list {path}, Err: {source}")]
     UmountFailed {
@@ -49,18 +39,20 @@ pub enum TryUmountError {
 }
 
 #[derive(Error, Debug)]
-pub enum SafeError {
-    #[error("Failed to get safe mode status, Err: {source}")]
-    GetFailed {
+pub enum Error {
+    #[error("Failed to set sepolicy, Err: {source}")]
+    SetSepolicyFailed {
         #[source]
         source: StdError,
     },
-}
-
-#[derive(Error, Debug)]
-pub enum SepolicyError {
-    #[error("Failed to set sepolicy, Err: {source}")]
-    SetFailed {
+        #[error("Failed to nuke {path}, Err: {source}")]
+    NukeFailed {
+        path: String,
+        #[source]
+        source: StdError,
+    },
+        #[error("Failed to get safe mode status, Err: {source}")]
+    GetSafeModeFailed {
         #[source]
         source: StdError,
     },

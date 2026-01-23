@@ -67,7 +67,7 @@ impl NukeExt4Sysfs {
                 unsafe { libc::ioctl(get_fd() as libc::c_int, KSU_IOCTL_NUKE_EXT4_SYSFS, &cmd) };
 
             if ret < 0 {
-                return Err(errors::NukeError::NukeFailed {
+                return Err(errors::Error::NukeFailed {
                     path: p.as_str()?.to_string(),
                     source: std::io::Error::last_os_error(),
                 }

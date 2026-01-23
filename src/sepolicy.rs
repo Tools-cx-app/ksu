@@ -20,7 +20,7 @@ pub fn set_sepolicy(cmd: &SetSepolicyCmd) -> Result<()> {
     };
 
     if ret < 0 {
-        return Err(errors::SepolicyError::SetFailed {
+        return Err(errors::Error::SetSepolicyFailed {
             source: std::io::Error::last_os_error(),
         }
         .into());
