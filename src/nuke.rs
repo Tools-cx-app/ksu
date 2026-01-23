@@ -6,7 +6,7 @@ use std::{
 use anyhow::Result;
 use rustix::path::Arg;
 
-use crate::{fd::get_fd, magic::KSU_IOCTL_NUKE_EXT4_SYSFS};
+use crate::{errors, fd::get_fd, magic::KSU_IOCTL_NUKE_EXT4_SYSFS};
 
 #[repr(C)]
 struct NukeExt4SysfsCmd {
@@ -67,11 +67,11 @@ impl NukeExt4Sysfs {
                 unsafe { libc::ioctl(get_fd() as libc::c_int, KSU_IOCTL_NUKE_EXT4_SYSFS, &cmd) };
 
             if ret < 0 {
-                return Err(anyhow::anyhow!(
-                    "Failed to nuke {}, Err: {}",
-                    p.display(),
-                    std::io::Error::last_os_error()
-                ));
+                return Err(errors::NukeError::NukeFailed {
+                    path: p.as_str()?.to_string(),
+                    source: std::io::Error::last_os_error(),
+                }
+                .into());
             }
         }
 

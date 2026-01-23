@@ -1,6 +1,7 @@
 use anyhow::Result;
 
 use crate::{
+    errors,
     fd::get_fd,
     magic::{KSU_IOCTL_GET_FEATURE, KSU_IOCTL_SET_FEATURE},
 };
@@ -35,7 +36,7 @@ impl Features {
 
     pub fn get(&self) -> Result<(u64, bool)> {
         let Some(feature_id) = self.feature_id else {
-            return Err(anyhow::anyhow!("No set feature_id!!"));
+            return Err(errors::FeatureError::MissingFeatureId.into());
         };
 
         let mut cmd = GetFeatureCmd {
@@ -47,11 +48,11 @@ impl Features {
         let ret =
             unsafe { libc::ioctl(get_fd() as libc::c_int, KSU_IOCTL_GET_FEATURE, &raw mut cmd) };
         if ret < 0 {
-            return Err(anyhow::anyhow!(
-                "Failed to get feature_id {}, Err: {}",
-                feature_id,
-                std::io::Error::last_os_error()
-            ));
+            return Err(errors::FeatureError::GetFailed {
+                id: feature_id,
+                source: std::io::Error::last_os_error(),
+            }
+            .into());
         }
 
         Ok((cmd.value, cmd.supported != 0))
@@ -59,22 +60,22 @@ impl Features {
 
     pub fn set(&self) -> Result<()> {
         let Some(feature_id) = self.feature_id else {
-            return Err(anyhow::anyhow!("No set feature_id!!"));
+            return Err(errors::FeatureError::MissingFeatureId.into());
         };
         let Some(value) = self.value else {
-            return Err(anyhow::anyhow!("No set value!!"));
+            return Err(errors::FeatureError::MissingValue.into());
         };
 
         let cmd = SetFeatureCmd { feature_id, value };
 
         let ret = unsafe { libc::ioctl(get_fd() as libc::c_int, KSU_IOCTL_SET_FEATURE, &cmd) };
         if ret < 0 {
-            return Err(anyhow::anyhow!(
-                "Failed to set feature_id {} to {}, Err: {}",
-                feature_id,
+            return Err(errors::FeatureError::SetFailed {
+                id: feature_id,
                 value,
-                std::io::Error::last_os_error()
-            ));
+                source: std::io::Error::last_os_error(),
+            }
+            .into());
         }
 
         Ok(())

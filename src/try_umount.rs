@@ -6,7 +6,7 @@ use std::{
 use anyhow::Result;
 use rustix::path::Arg;
 
-use crate::{fd::get_fd, magic::KSU_IOCTL_ADD_TRY_UMOUNT};
+use crate::{errors, fd::get_fd, magic::KSU_IOCTL_ADD_TRY_UMOUNT};
 
 #[repr(C)]
 #[derive(Clone, Copy, Default)]
@@ -70,11 +70,11 @@ impl TryUmount {
                 unsafe { libc::ioctl(get_fd() as libc::c_int, KSU_IOCTL_ADD_TRY_UMOUNT, &cmd) };
 
             if ret < 0 {
-                return Err(anyhow::anyhow!(
-                    "Failed to umount {}, Err: {}",
-                    p.display(),
-                    std::io::Error::last_os_error()
-                ));
+                return Err(errors::TryUmountError::UmountFailed {
+                    path: p.as_str()?.to_string(),
+                    source: std::io::Error::last_os_error(),
+                }
+                .into());
             }
         }
 
@@ -104,10 +104,10 @@ impl TryUmount {
         let ret = unsafe { libc::ioctl(get_fd() as libc::c_int, KSU_IOCTL_ADD_TRY_UMOUNT, &cmd) };
 
         if ret < 0 {
-            return Err(anyhow::anyhow!(
-                "Failed to wipe list, Err: {}",
-                std::io::Error::last_os_error()
-            ));
+            return Err(errors::TryUmountError::WipeFailed {
+                source: std::io::Error::last_os_error(),
+            }
+            .into());
         };
 
         Ok(())
