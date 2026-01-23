@@ -5,8 +5,8 @@ mod info;
 mod magic;
 mod nuke;
 mod safe;
-mod try_umount;
 mod sepolicy;
+mod try_umount;
 
 pub use errors::*;
 pub use features::Features;

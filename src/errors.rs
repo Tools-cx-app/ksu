@@ -45,13 +45,13 @@ pub enum Error {
         #[source]
         source: StdError,
     },
-        #[error("Failed to nuke {path}, Err: {source}")]
+    #[error("Failed to nuke {path}, Err: {source}")]
     NukeFailed {
         path: String,
         #[source]
         source: StdError,
     },
-        #[error("Failed to get safe mode status, Err: {source}")]
+    #[error("Failed to get safe mode status, Err: {source}")]
     GetSafeModeFailed {
         #[source]
         source: StdError,
