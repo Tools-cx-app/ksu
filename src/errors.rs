@@ -56,3 +56,12 @@ pub enum SafeError {
         source: StdError,
     },
 }
+
+#[derive(Error, Debug)]
+pub enum SepolicyError {
+    #[error("Failed to set sepolicy, Err: {source}")]
+    SetFailed {
+        #[source]
+        source: StdError,
+    },
+}
