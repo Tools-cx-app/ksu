@@ -7,6 +7,11 @@ pub(crate) const KSU_IOCTL_GET_INFO: u64 = libc::_IOR::<()>(K, 2);
 pub(crate) const KSU_IOCTL_GET_INFO: i32 = libc::_IOR::<()>(K, 2);
 
 #[cfg(target_env = "gnu")]
+pub(crate) const KSU_IOCTL_CHECK_SAFEMODE: u64 = libc::_IOR::<()>(K, 5);
+#[cfg(not(target_env = "gnu"))]
+pub(crate) const KSU_IOCTL_CHECK_SAFEMODE: i32 = libc::_IOR::<()>(K, 5);
+
+#[cfg(target_env = "gnu")]
 pub(crate) const KSU_IOCTL_GET_FEATURE: u64 = libc::_IOWR::<()>(K, 13);
 #[cfg(not(target_env = "gnu"))]
 pub(crate) const KSU_IOCTL_GET_FEATURE: i32 = libc::_IOWR::<()>(K, 13);

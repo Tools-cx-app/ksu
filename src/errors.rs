@@ -47,3 +47,12 @@ pub enum TryUmountError {
         source: StdError,
     },
 }
+
+#[derive(Error, Debug)]
+pub enum SafeError {
+    #[error("Failed to get safe mode status, Err: {source}")]
+    GetFailed {
+        #[source]
+        source: StdError,
+    },
+}
