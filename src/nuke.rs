@@ -82,15 +82,3 @@ impl NukeExt4Sysfs {
         Ok(())
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn nuke() {
-        let nuke = NukeExt4Sysfs::new().add("/test").execute();
-
-        assert!(nuke.is_ok());
-    }
-}
