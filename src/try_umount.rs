@@ -55,6 +55,7 @@ impl TryUmount {
         self
     }
 
+    /// Add mount point to umount list
     pub fn umount(&self) -> Result<()> {
         for p in &self.paths {
             log::debug!("{} will umount", p.display());
@@ -85,6 +86,7 @@ impl TryUmount {
         Ok(())
     }
 
+    /// Delete mount point from umount list
     pub fn del(&self) -> Result<()> {
         for p in &self.paths {
             log::debug!("{} will deleted", p.display());
@@ -124,6 +126,7 @@ impl TryUmount {
         self
     }
 
+    /// Wipe all entries from umount list
     pub fn wipe(&self) -> Result<()> {
         let cmd = AddTryUmountCmd {
             arg: 0,

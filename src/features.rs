@@ -34,6 +34,8 @@ impl Features {
         }
     }
 
+    /// Get feature value and support status from kernel
+    /// Returns (value, supported)
     pub fn get(&self) -> Result<(u64, bool)> {
         let Some(feature_id) = self.feature_id else {
             return Err(errors::Error::MissingFeatureId.into());
@@ -58,6 +60,7 @@ impl Features {
         Ok((cmd.value, cmd.supported != 0))
     }
 
+    /// Set feature value in kernel
     pub fn set(&self) -> Result<()> {
         let Some(feature_id) = self.feature_id else {
             return Err(errors::Error::MissingFeatureId.into());

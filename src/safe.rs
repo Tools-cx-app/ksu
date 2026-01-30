@@ -8,6 +8,7 @@ struct CheckSafemodeCmd {
     in_safe_mode: u8,
 }
 
+/// Check is safe mode
 pub fn safemode() -> Result<bool> {
     let mut cmd = CheckSafemodeCmd { in_safe_mode: 0 };
     let ret = unsafe {

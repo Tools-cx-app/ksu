@@ -9,6 +9,7 @@ pub struct SetSepolicyCmd {
     pub arg: u64,
 }
 
+/// Set selinux policy
 pub fn set_sepolicy(cmd: &SetSepolicyCmd) -> Result<()> {
     let mut cmd = *cmd;
     let ret = unsafe {
