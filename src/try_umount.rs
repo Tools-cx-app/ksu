@@ -70,7 +70,7 @@ impl TryUmount {
                 unsafe { libc::ioctl(get_fd() as libc::c_int, KSU_IOCTL_ADD_TRY_UMOUNT, &cmd) };
 
             if ret < 0 {
-                return Err(errors::TryUmountError::UmountFailed {
+                return Err(errors::Error::TryUmountAddFailed {
                     path: p.as_str()?.to_string(),
                     source: std::io::Error::last_os_error(),
                 }
@@ -104,7 +104,7 @@ impl TryUmount {
         let ret = unsafe { libc::ioctl(get_fd() as libc::c_int, KSU_IOCTL_ADD_TRY_UMOUNT, &cmd) };
 
         if ret < 0 {
-            return Err(errors::TryUmountError::WipeFailed {
+            return Err(errors::Error::TryUmountWipeFailed {
                 source: std::io::Error::last_os_error(),
             }
             .into());

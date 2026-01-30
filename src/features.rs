@@ -36,7 +36,7 @@ impl Features {
 
     pub fn get(&self) -> Result<(u64, bool)> {
         let Some(feature_id) = self.feature_id else {
-            return Err(errors::FeatureError::MissingFeatureId.into());
+            return Err(errors::Error::MissingFeatureId.into());
         };
 
         let mut cmd = GetFeatureCmd {
@@ -48,7 +48,7 @@ impl Features {
         let ret =
             unsafe { libc::ioctl(get_fd() as libc::c_int, KSU_IOCTL_GET_FEATURE, &raw mut cmd) };
         if ret < 0 {
-            return Err(errors::FeatureError::GetFailed {
+            return Err(errors::Error::GetFeatureFailed {
                 id: feature_id,
                 source: std::io::Error::last_os_error(),
             }
@@ -60,17 +60,17 @@ impl Features {
 
     pub fn set(&self) -> Result<()> {
         let Some(feature_id) = self.feature_id else {
-            return Err(errors::FeatureError::MissingFeatureId.into());
+            return Err(errors::Error::MissingFeatureId.into());
         };
         let Some(value) = self.value else {
-            return Err(errors::FeatureError::MissingValue.into());
+            return Err(errors::Error::MissingFeatureValue.into());
         };
 
         let cmd = SetFeatureCmd { feature_id, value };
 
         let ret = unsafe { libc::ioctl(get_fd() as libc::c_int, KSU_IOCTL_SET_FEATURE, &cmd) };
         if ret < 0 {
-            return Err(errors::FeatureError::SetFailed {
+            return Err(errors::Error::SetFeatureFailed {
                 id: feature_id,
                 value,
                 source: std::io::Error::last_os_error(),
