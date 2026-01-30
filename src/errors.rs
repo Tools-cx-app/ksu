@@ -48,4 +48,10 @@ pub enum Error {
         #[source]
         source: StdError,
     },
+    #[error("Failed to delete try-umount list {path}, Err: {source}")]
+    TryUmountDelFailed {
+        path: String,
+        #[source]
+        source: StdError,
+    },
 }

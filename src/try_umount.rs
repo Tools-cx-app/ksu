@@ -85,6 +85,36 @@ impl TryUmount {
         Ok(())
     }
 
+    pub fn del(&self) -> Result<()> {
+        for p in &self.paths {
+            log::debug!("{} will deleted", p.display());
+
+            let c_path = std::ffi::CString::new(p.as_str()?)?;
+            let cmd = AddTryUmountCmd {
+                arg: c_path.as_ptr() as u64,
+                flags: 2,
+                mode: 0,
+            };
+
+            let ret =
+                unsafe { libc::ioctl(get_fd() as libc::c_int, KSU_IOCTL_ADD_TRY_UMOUNT, &cmd) };
+
+            if ret < 0 {
+                return Err(errors::Error::TryUmountDelFailed {
+                    path: p.as_str()?.to_string(),
+                    source: std::io::Error::last_os_error(),
+                }
+                .into());
+            }
+        }
+
+        if let Some(s) = self.format_msg.clone() {
+            log::debug!("{s}");
+        }
+
+        Ok(())
+    }
+
     pub fn format_msg<C, F>(&mut self, style: F) -> &mut Self
     where
         C: fmt::Display + Send + Sync + 'static,
