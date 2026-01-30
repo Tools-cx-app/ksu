@@ -2,6 +2,11 @@
 name = "ksu"
 version = "0.1.1"
 edition = "2024"
+description = "A simple ksucalls library"
+authors = ["Tools-cx-app"]
+license = "MIT"
+readme = "README.md"
+repository = "https://github.com/Tools-cx-app/ksu/"
 
 [dependencies]
 anyhow = "1.0.100"
