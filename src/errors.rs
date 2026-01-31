@@ -54,4 +54,29 @@ pub enum Error {
         #[source]
         source: StdError,
     },
+    #[error("Failed to set mark({pid}), Err: {source}")]
+    MarkSetFailed {
+        pid: i32,
+        #[source]
+        source: StdError,
+    },
+    #[error("Failed to unset mark({pid}), Err: {source}")]
+    MarkUnSetFailed {
+        pid: i32,
+        #[source]
+        source: StdError,
+    },
+    #[error("Failed to get mark({pid}), Err: {source}")]
+    MarkGetFailed {
+        pid: i32,
+        #[source]
+        source: StdError,
+    },
+    #[error("pid is not set")]
+    MarkissingPid,
+    #[error("Failed to refresh mark, Err: {source}")]
+    MarkRefreshFailed {
+        #[source]
+        source: StdError,
+    },
 }

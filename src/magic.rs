@@ -26,6 +26,11 @@ pub(crate) const KSU_IOCTL_SET_FEATURE: i32 = libc::_IOW::<()>(K, 14);
 #[cfg(target_env = "gnu")]
 pub(crate) const KSU_IOCTL_SET_FEATURE: u64 = libc::_IOW::<()>(K, 14);
 
+#[cfg(not(target_env = "gnu"))]
+pub(crate) const KSU_IOCTL_MANAGE_MARK: i32 = libc::_IOWR::<()>(K, 16);
+#[cfg(target_env = "gnu")]
+pub(crate) const KSU_IOCTL_MANAGE_MARK: u64 = libc::_IOWR::<()>(K, 16);
+
 #[cfg(target_env = "gnu")]
 pub(crate) const KSU_IOCTL_NUKE_EXT4_SYSFS: u64 = libc::_IOW::<()>(K, 17);
 #[cfg(not(target_env = "gnu"))]
