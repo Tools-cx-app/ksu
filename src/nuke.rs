@@ -18,6 +18,12 @@ pub struct NukeExt4Sysfs {
     format_msg: Option<String>,
 }
 
+impl Default for NukeExt4Sysfs {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl NukeExt4Sysfs {
     pub fn new() -> Self {
         Self {

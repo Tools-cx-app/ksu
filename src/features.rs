@@ -26,6 +26,12 @@ pub struct Features {
     value: Option<u64>,
 }
 
+impl Default for Features {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Features {
     pub fn new() -> Self {
         Self {

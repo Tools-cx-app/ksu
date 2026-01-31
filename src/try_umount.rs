@@ -22,6 +22,12 @@ pub struct TryUmount {
     format_msg: Option<String>,
 }
 
+impl Default for TryUmount {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl TryUmount {
     pub fn new() -> Self {
         Self {

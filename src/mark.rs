@@ -15,6 +15,12 @@ pub struct MarkManager {
     pid: Option<i32>,
 }
 
+impl Default for MarkManager {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl MarkManager {
     pub fn new() -> Self {
         Self { pid: None }
