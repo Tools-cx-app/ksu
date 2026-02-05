@@ -9,7 +9,7 @@ readme = "README.md"
 repository = "https://github.com/Tools-cx-app/ksu/"
 
 [dependencies]
-anyhow = "1.0.100"
+anyhow = "1.0.101"
 libc = "0.2.180"
 log = "0.4.29"
 rustix = { version = "1.1.3", features = ["fs"] }
