@@ -24,6 +24,15 @@ impl Default for NukeExt4Sysfs {
     }
 }
 
+impl fmt::Debug for NukeExt4Sysfs {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Nuke")
+            .field("paths", &self.paths)
+            .field("msg", &self.format_msg)
+            .finish()
+    }
+}
+
 impl NukeExt4Sysfs {
     pub fn new() -> Self {
         Self {

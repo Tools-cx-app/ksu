@@ -1,3 +1,5 @@
+use std::fmt;
+
 use anyhow::Result;
 
 use crate::{
@@ -29,6 +31,15 @@ pub struct Features {
 impl Default for Features {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+impl fmt::Debug for Features {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Features")
+            .field("id", &self.feature_id)
+            .field("value", &self.value)
+            .finish()
     }
 }
 

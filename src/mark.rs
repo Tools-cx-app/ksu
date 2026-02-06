@@ -1,3 +1,5 @@
+use std::fmt;
+
 use anyhow::Result;
 
 use crate::{errors, fd::get_fd, magic::KSU_IOCTL_MANAGE_MARK};
@@ -18,6 +20,12 @@ pub struct MarkManager {
 impl Default for MarkManager {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+impl fmt::Debug for MarkManager {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Mark").field("pid", &self.pid).finish()
     }
 }
 

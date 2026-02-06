@@ -28,6 +28,16 @@ impl Default for TryUmount {
     }
 }
 
+impl fmt::Debug for TryUmount {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("TryUmount")
+            .field("paths", &self.paths)
+            .field("flags", &self.flags)
+            .field("msg", &self.format_msg)
+            .finish()
+    }
+}
+
 impl TryUmount {
     pub fn new() -> Self {
         Self {
