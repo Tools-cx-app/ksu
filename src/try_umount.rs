@@ -4,6 +4,7 @@ use std::{
 };
 
 use anyhow::Result;
+use bitflags::bitflags;
 use rustix::path::Arg;
 
 use crate::{errors, fd::get_fd, magic::KSU_IOCTL_ADD_TRY_UMOUNT};
@@ -14,6 +15,16 @@ struct AddTryUmountCmd {
     arg: u64,   // char ptr, this is the mountpoint
     flags: u32, // this is the flag we use for it
     mode: u8,   // denotes what to do with it 0:wipe_list 1:add_to_list 2:delete_entry
+}
+
+bitflags! {
+    pub struct TryUmountFlags: u32 {
+        const MNT_FORCE = 1;
+        const MNT_DETACH = 2;
+        const MNT_EXPIRE = 4;
+        const UMOUNT_NOFOLLOW = 8;
+        const _ =0;
+    }
 }
 
 pub struct TryUmount {
@@ -35,6 +46,18 @@ impl fmt::Debug for TryUmount {
             .field("flags", &self.flags)
             .field("msg", &self.format_msg)
             .finish()
+    }
+}
+
+impl fmt::Debug for TryUmountFlags {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let mut map = f.debug_map();
+
+        for (k, v) in self.iter_names() {
+            map.entry(&k, &v.bits());
+        }
+
+        map.finish()
     }
 }
 
@@ -66,8 +89,8 @@ impl TryUmount {
         self
     }
 
-    pub fn flags(&mut self, flags: u32) -> &mut Self {
-        self.flags = flags;
+    pub fn flags(&mut self, flags: TryUmountFlags) -> &mut Self {
+        self.flags = flags.bits();
         self
     }
 
