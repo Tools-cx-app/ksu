@@ -19,11 +19,11 @@ struct AddTryUmountCmd {
 
 bitflags! {
     pub struct TryUmountFlags: u32 {
-        const MNT_FORCE = 1;
-        const MNT_DETACH = 2;
-        const MNT_EXPIRE = 4;
-        const UMOUNT_NOFOLLOW = 8;
-        const _ =0;
+        const MNT_FORCE = linux_raw_sys::general::MNT_FORCE;
+        const MNT_DETACH = linux_raw_sys::general::MNT_DETACH;
+        const MNT_EXPIRE = linux_raw_sys::general::MNT_EXPIRE;
+        const UMOUNT_NOFOLLOW = linux_raw_sys::general::UMOUNT_NOFOLLOW;
+        const _ = linux_raw_sys::general::MNT_DETACH;
     }
 }
 
