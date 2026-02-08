@@ -16,4 +16,4 @@ pub use mark::MarkManager;
 pub use nuke::NukeExt4Sysfs;
 pub use safe::safemode;
 pub use sepolicy::*;
-pub use try_umount::TryUmount;
+pub use try_umount::*;
