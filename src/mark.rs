@@ -13,6 +13,7 @@ struct ManageMarkCmd {
 }
 
 /// Mark Manager
+#[derive(Clone)]
 pub struct MarkManager {
     pid: Option<i32>,
 }

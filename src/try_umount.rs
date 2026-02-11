@@ -27,6 +27,7 @@ bitflags! {
     }
 }
 
+#[derive(Clone)]
 pub struct TryUmount {
     paths: Vec<PathBuf>,
     flags: u32,

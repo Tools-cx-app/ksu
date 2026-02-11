@@ -23,6 +23,7 @@ struct SetFeatureCmd {
     value: u64,
 }
 
+#[derive(Clone)]
 pub struct Features {
     feature_id: Option<u32>,
     value: Option<u64>,
