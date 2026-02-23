@@ -3,7 +3,7 @@ mod magic;
 
 use anyhow::Result;
 
-use crate::{fd::get_fd, resukisu::magic::SUKISU_IOCTL_DYNAMIC_MANAGER};
+use crate::{fd::get_fd, dynamic_manager::magic::SUKISU_IOCTL_DYNAMIC_MANAGER};
 
 #[repr(C)]
 #[derive(Clone, Copy)]
