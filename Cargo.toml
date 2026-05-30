@@ -13,7 +13,7 @@ dynamic-manager = []
 
 [dependencies]
 anyhow = "1.0.102"
-bitflags = "2.11.0"
+bitflags = "2.11.1"
 libc = "0.2.182"
 linux-raw-sys = "0.12.1"
 log = "0.4.29"
