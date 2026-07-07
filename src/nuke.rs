@@ -34,7 +34,7 @@ impl fmt::Debug for NukeExt4Sysfs {
 }
 
 impl NukeExt4Sysfs {
-    pub fn new() -> Self {
+    pub const fn new() -> Self {
         Self {
             paths: Vec::new(),
             format_msg: None,

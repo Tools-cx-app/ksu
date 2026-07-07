@@ -63,7 +63,7 @@ impl fmt::Debug for TryUmountFlags {
 }
 
 impl TryUmount {
-    pub fn new() -> Self {
+    pub const fn new() -> Self {
         Self {
             paths: Vec::new(),
             flags: 0,

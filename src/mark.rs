@@ -31,7 +31,7 @@ impl fmt::Debug for MarkManager {
 }
 
 impl MarkManager {
-    pub fn new() -> Self {
+    pub const fn new() -> Self {
         Self { pid: None }
     }
 

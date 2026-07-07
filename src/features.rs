@@ -45,7 +45,7 @@ impl fmt::Debug for Features {
 }
 
 impl Features {
-    pub fn new() -> Self {
+    pub const fn new() -> Self {
         Self {
             feature_id: None,
             value: None,
